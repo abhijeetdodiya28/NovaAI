@@ -86,9 +86,12 @@ function Sidebar() {
     }
 
     try {
-      const res = await axios.get("http://localhost:7000/api/thread", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/thread`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       const threadsRaw = Array.isArray(res.data) ? res.data : [];
 
@@ -207,7 +210,7 @@ function Sidebar() {
 
       try {
         const res = await axios.get(
-          `http://localhost:7000/api/thread/${newThreadId}`,
+          `${import.meta.env.VITE_API_URL}/api/thread/${newThreadId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -265,9 +268,12 @@ function Sidebar() {
     if (!token) return;
 
     try {
-      await axios.delete(`http://localhost:7000/api/thread/${threadId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/thread/${threadId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       await getAllThreads();
 

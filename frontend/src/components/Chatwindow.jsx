@@ -98,14 +98,17 @@ function ChatWindow() {
 
         //  2️ Then create the real thread in background
         try {
-          const threadRes = await fetch("http://localhost:7000/api/thread", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ title: tempTitle }),
-          });
+          const threadRes = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/thread`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ title: tempTitle }),
+            }
+          );
 
           const threadData = await threadRes.json();
 
@@ -135,7 +138,7 @@ function ChatWindow() {
 
       setMessages((prev = []) => [...prev, { role: "user", content: prompt }]);
 
-      const response = await fetch("http://localhost:7000/api/chat", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
