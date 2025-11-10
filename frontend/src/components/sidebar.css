@@ -1,0 +1,222 @@
+/* === SIDEBAR === */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background: #0b0b0b;
+  border-right: 1px solid #222;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+  z-index: 1000;
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+/* === TOGGLE BUTTON === */
+.toggle-btn {
+  position: fixed;
+  top: 5%;
+  left: 255px;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #151515;
+  border: 2px solid #9333ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3000;
+  transition: left 0.4s ease, box-shadow 0.3s ease, background 0.3s ease;
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.4);
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+/* icon styling (only rotates here, not the button) */
+.toggle-icon {
+  color: #bda9ff;
+  font-size: 1rem;
+  transition: transform 0.35s ease, color 0.35s ease;
+}
+
+/* Hover effects */
+.toggle-btn:hover {
+  background: #9333ea;
+}
+.toggle-btn:hover .toggle-icon {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+/* When sidebar is collapsed */
+.toggle-btn.collapsed {
+  left: 20px;
+}
+
+/* Optional icon flip on collapse */
+.toggle-btn.collapsed .toggle-icon {
+  transform: rotate(180deg);
+  color: #c084fc;
+}
+
+/* === LOGO === */
+.sidebar-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid #222;
+}
+.logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: contain;
+  background: radial-gradient(circle at center, #2a1a43 0%, #111 100%);
+  box-shadow: 0 0 6px rgba(162, 93, 255, 0.3);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.logo:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(162, 93, 255, 0.6);
+}
+.appName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #bda9ff;
+}
+
+/* === NEW CHAT BUTTON === */
+.sidebar-header {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+}
+.newChatBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+.newChatBtn:hover {
+  background: #9333ea;
+  box-shadow: 0 0 12px rgba(147, 51, 234, 0.5);
+}
+
+/* === HISTORY === */
+.history {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #9333ea #111;
+}
+.history::-webkit-scrollbar {
+  width: 8px;
+}
+.history::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6b21a8, #9333ea);
+  border-radius: 10px;
+}
+
+.history li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #1a1a1a;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+.history li:hover {
+  background: #1a1a1a;
+}
+.highlighted {
+  background: #2a2a2a;
+  font-weight: bold;
+}
+
+/* === TRASH ICON === */
+.threadTrash {
+  color: #888;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 0.25s ease;
+}
+.threadTrash:hover {
+  color: #ff4040;
+}
+
+/* === FOOTER === */
+.sign {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #777;
+  border-top: 1px solid #333;
+  padding: 0.6rem 0;
+}
+
+/* === CHAT EXPANSION WHEN SIDEBAR COLLAPSES === */
+.main-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.chatWindow {
+  flex: 1;
+  margin-left: 260px;
+  transition: all 0.35s ease;
+  background: linear-gradient(180deg, #101010 0%, #0b0b0b 100%);
+}
+
+.sidebar.collapsed ~ .chatWindow {
+  margin-left: 0;
+}
+
+/* Fixed toggle button that stays even if sidebar is hidden */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 20px;
+  left: 255px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 2px solid #9333ea;
+  color: #bda9ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3000;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+}
+
+.sidebar-toggle-btn:hover {
+  background: #9333ea;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.sidebar-toggle-btn.collapsed {
+  left: 15px;
+  background: #151515;
+}
