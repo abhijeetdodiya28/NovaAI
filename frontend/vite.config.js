@@ -1,13 +1,13 @@
-// D:\abhijeetthinks\chatBot\frontend\vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react'; // Example: Assuming you are using React
-
+// Force Vite to use rollup's JS version instead of native binary
 export default defineConfig({
-  plugins: [
-    // Include your framework plugin (e.g., React, Vue, Svelte)
-    react(), 
-    // Do NOT add 'tailwindcss()' here. PostCSS handles the injection.
-  ],
-  // You do not need to manually configure CSS/PostCSS here
-});
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      // This ensures rollup-loads the fallback JS implementation
+      externalNativeModule: true
+    }
+  }
+})

@@ -16,9 +16,10 @@
     "tailwind:init": "tailwindcss init -p"
   },
 
-  "overrides": {
-    "rollup": "npm:@rollup/wasm-node"
-  },
+ "overrides": {
+  "rollup": "npm:@rollup/rollup"
+}
+,
 
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
