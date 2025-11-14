@@ -95,7 +95,7 @@ router.get(
         );
 
         // For production, use httpOnly cookie instead of query param
-        res.redirect(`http://localhost:5173/auth/google/callback?token=${token}`);
+    res.redirect(`https://frontend-ainova.vercel.app?token=${token}`);
     }
 );
 
