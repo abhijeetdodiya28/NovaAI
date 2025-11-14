@@ -17,8 +17,10 @@
   },
 
  "overrides": {
-  "rollup": "npm:@rollup/rollup"
+  "@rollup/rollup-linux-x64-gnu": "0.0.0",
+  "rollup": "4.9.6"
 }
+
 ,
 
   "dependencies": {
