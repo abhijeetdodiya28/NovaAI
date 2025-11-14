@@ -16,7 +16,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await apiFetch("/auth/login", {
+            const data = await apiFetch("/api/auth/login", {
                 method: "POST",
                 body: JSON.stringify(form),
             });
@@ -35,7 +35,7 @@ const Login = () => {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:7000/api/auth/google";
+        window.location.href = "https://novaai-ktt3.onrender.com/api/auth/google";
     };
 
     const handleSignupRedirect = () => {
@@ -43,7 +43,7 @@ const Login = () => {
     };
 
     const handleResetPassword = () => {
-        window.location.href = "http://localhost:5173/forgot-password";
+        window.location.href = "https://nova-ai-rkqs.vercel.app/forgot-password";
     }
 
     return (
