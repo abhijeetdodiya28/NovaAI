@@ -95,7 +95,7 @@ router.get(
         );
 
         // For production, use httpOnly cookie instead of query param
-    res.redirect(`https://frontend-ainova.vercel.app?token=${token}`);
+        res.redirect(`https://nova-ai-yp7u.vercel.app?token=${token}`);
     }
 );
 
@@ -109,7 +109,7 @@ router.post("/forgot-password", async (req, res) => {
         if (!user) return res.status(404).json({ message: "User not found" });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        const resetLink = `http://localhost:5173/reset-password/${token}`;
+        const resetLink = `https://nova-ai-yp7u.vercel.app/reset-password/${token}`;
 
         await sendEmail(user.email, "Password Reset", `Click here to reset: ${resetLink}`);
         res.json({ message: "Password reset link sent to your email" });

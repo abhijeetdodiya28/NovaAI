@@ -7,20 +7,19 @@ const client = new OpenAI({
 });
 
 const getOpenAIAPIResponse = async (userMessage) => {
-    const options = {
-        model: "gpt-4o-mini",
-        messages: [
-            { role: "user", content: userMessage },
-        ],
-    };
-
     try {
-        const response = await client.chat.completions.create(options);
-        return response.choices[0].message.content;
+        const completion = await client.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                { role: "system", content: "You are a helpful assistant" },
+                { role: "user", content: userMessage }
+            ]
+        });
 
+        return completion.choices[0].message.content.trim();
     } catch (error) {
-        console.log(error);
-        throw new Error(error.message || "Something went wrong with OpenAI model");
+        console.error("🔥 OpenAI Error:", error);
+        return "Sorry, the AI failed to respond.";
     }
 };
 

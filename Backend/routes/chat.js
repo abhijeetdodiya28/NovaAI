@@ -185,9 +185,11 @@ router.put("/thread/:threadId", async (req, res) => {
             return res.status(400).json({ error: "Title is required" });
         }
 
-        // Find thread by threadId field (not _id)
+        const userId = new mongoose.Types.ObjectId(req.user.id);
+
+        // Only allow the owner of the thread to update it
         const thread = await Thread.findOneAndUpdate(
-            { threadId },
+            { threadId, userId },   // IMPORTANT FIX
             { title },
             { new: true }
         );
@@ -202,5 +204,6 @@ router.put("/thread/:threadId", async (req, res) => {
         res.status(500).json({ error: "Server error while updating thread" });
     }
 });
+
 
 export default router;
