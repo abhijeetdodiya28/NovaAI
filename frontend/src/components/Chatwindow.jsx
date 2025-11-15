@@ -99,7 +99,7 @@ function ChatWindow() {
         //  2️ Then create the real thread in background
         try {
           const threadRes = await fetch(
-            `${import.meta.env.VITE_API_URL}/api/thread`,
+            `https://novaai-ktt3.onrender.com/api/thread`,
             {
               method: "POST",
               headers: {
@@ -121,12 +121,12 @@ function ChatWindow() {
               prev.map((t) =>
                 t.threadId === tempThreadId
                   ? {
-                      ...t,
-                      threadId: threadData.threadId,
-                      title: threadData.title?.trim()
-                        ? threadData.title
-                        : tempTitle,
-                    }
+                    ...t,
+                    threadId: threadData.threadId,
+                    title: threadData.title?.trim()
+                      ? threadData.title
+                      : tempTitle,
+                  }
                   : t
               )
             );
@@ -138,7 +138,7 @@ function ChatWindow() {
 
       setMessages((prev = []) => [...prev, { role: "user", content: prompt }]);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, {
+      const response = await fetch(`https://novaai-ktt3.onrender.com/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

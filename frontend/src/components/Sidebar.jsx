@@ -87,7 +87,7 @@ function Sidebar() {
 
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/thread`,
+        `https://novaai-ktt3.onrender.com/api/thread`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -210,7 +210,7 @@ function Sidebar() {
 
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/thread/${newThreadId}`,
+          `https://novaai-ktt3.onrender.com/api/thread/${newThreadId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -269,7 +269,7 @@ function Sidebar() {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/thread/${threadId}`,
+        `https://novaai-ktt3.onrender.com/api/thread/${threadId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -350,9 +350,8 @@ function Sidebar() {
         onClick={toggleSidebar}
       >
         <i
-          className={`fa-solid ${
-            collapsed ? "fa-chevron-right" : "fa-chevron-left"
-          }`}
+          className={`fa-solid ${collapsed ? "fa-chevron-right" : "fa-chevron-left"
+            }`}
         ></i>
       </div>
     </>
