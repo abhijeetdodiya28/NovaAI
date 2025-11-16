@@ -11,10 +11,7 @@ export const MyContext = createContext();
 
 export const MyProvider = ({ children }) => {
   const [allThreads, setAllThreads] = useState([]);
-  const [currThreadId, setCurrThreadIdState] = useState(() => {
-    const saved = localStorage.getItem("currThreadId");
-    return saved && !saved.startsWith("local-") ? saved : null;
-  });
+  const [currThreadId, setCurrThreadIdState] = useState(null);
 
   const [newChat, setNewChat] = useState(false);
   const [prompt, setPrompt] = useState("");
@@ -23,38 +20,30 @@ export const MyProvider = ({ children }) => {
 
   const { user } = useContext(AuthContext);
 
-  //  Save currThreadId whenever it changes
-  useEffect(() => {
-    if (currThreadId) {
-      localStorage.setItem("currThreadId", currThreadId);
-    } else {
-      localStorage.removeItem("currThreadId");
-    }
-  }, [currThreadId]);
-
-  // Wrap setter to keep storage in sync
+  // Set current thread
   const setCurrThreadId = (id) => {
     setCurrThreadIdState(id);
-    if (id) {
-      localStorage.setItem("currThreadId", id);
-    } else {
-      localStorage.removeItem("currThreadId");
-    }
+    if (id) localStorage.setItem("currThreadId", id);
+    else localStorage.removeItem("currThreadId");
   };
 
-  // Helper to clear all chat-related state
+  // FULL RESET
   const resetContext = useCallback(() => {
     setAllThreads([]);
-    setCurrThreadId(null);
+    setCurrThreadIdState(null);
+    localStorage.removeItem("currThreadId");
+
     setNewChat(false);
     setPrompt("");
     setReply(null);
     setMessages([]);
   }, []);
 
-  // Clear everything if user logs out
+  // When user logs out -> clear everything
   useEffect(() => {
-    if (!user) resetContext();
+    if (!user) {
+      resetContext();
+    }
   }, [user, resetContext]);
 
   return (

@@ -16,11 +16,15 @@ router.post("/signup", async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        const existingUser = await User.findOne({ email });
-        if (existingUser)
-            return res.status(400).json({ error: "User already exists" });
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
 
-        // const hashedPassword = await bcrypt.hash(password, 10);
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: "User already exists" });
+        }
+
         const newUser = new User({ username, email, password });
         await newUser.save();
 
@@ -39,9 +43,10 @@ router.post("/signup", async (req, res) => {
                 email: newUser.email,
             },
         });
+
     } catch (err) {
-        console.error("Signup error:", err.message);
-        res.status(500).json({ error: "Server error" });
+        console.error("Signup error:", err);
+        res.status(500).json({ error: "Server error: " + err.message });
     }
 });
 

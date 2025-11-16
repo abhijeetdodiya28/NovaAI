@@ -33,14 +33,12 @@ function Chat() {
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`message-wrapper ${
-              msg.role === "user" ? "user" : "assistant"
-            }`}
+            className={`message-wrapper ${msg.role === "user" ? "user" : "assistant"
+              }`}
           >
             <div
-              className={`bubble ${
-                msg.role === "user" ? "user-bubble" : "assistant-bubble"
-              }`}
+              className={`bubble ${msg.role === "user" ? "user-bubble" : "assistant-bubble"
+                }`}
             >
               <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
                 {msg.content}

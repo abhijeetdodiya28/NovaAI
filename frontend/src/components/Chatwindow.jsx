@@ -1,7 +1,7 @@
 import "./Chatwindow.css";
 import Chat from "./Chat.jsx";
 import Swal from "sweetalert2";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { MyContext } from "../context/MyContext.jsx";
 import { ScaleLoader } from "react-spinners";
 import { AuthContext } from "../context/AuthContext.jsx";
@@ -11,8 +11,6 @@ function ChatWindow() {
   const {
     prompt,
     setPrompt,
-    reply,
-    setReply,
     currThreadId,
     setCurrThreadId,
     setMessages,
@@ -27,11 +25,18 @@ function ChatWindow() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
+  // Clear UI messages when switching thread
+  useEffect(() => {
+    setMessages([]);
+    setPrompt("");
+  }, [currThreadId]);
+
   const typeEffect = (text) => {
     return new Promise((resolve) => {
       const words = text.split(" ");
       let currText = "";
       let idx = 0;
+
       const interval = setInterval(() => {
         if (idx < words.length) {
           currText += (idx > 0 ? " " : "") + words[idx];
@@ -62,7 +67,6 @@ function ChatWindow() {
         icon: "info",
         title: "Empty Chat!",
         text: "Please type something to start a chat.",
-        confirmButtonText: "OK",
         confirmButtonColor: "#10a37f",
       });
       setNewChat(true);
@@ -83,61 +87,38 @@ function ChatWindow() {
 
     try {
       let threadId = currThreadId;
-      const isLocalTemp = !threadId || String(threadId).startsWith("local-");
 
-      if (isLocalTemp) {
-        // 1️ Create a temporary thread immediately for instant sidebar update
-        const tempThreadId = `local-${Date.now()}`;
-        const tempTitle = prompt?.slice(0, 50) || "New Chat";
-
-        setCurrThreadId(tempThreadId);
-        setAllThreads((prev = []) => [
-          { threadId: tempThreadId, title: tempTitle, messages: [] },
-          ...prev,
-        ]);
-
-        //  2️ Then create the real thread in background
-        try {
-          const threadRes = await fetch(
-            `https://novaai-ktt3.onrender.com/api/thread`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({ title: tempTitle }),
-            }
-          );
-
-          const threadData = await threadRes.json();
-
-          if (threadData?.threadId) {
-            threadId = threadData.threadId;
-            setCurrThreadId(threadData.threadId);
-
-            // 3️ Replace the temporary thread with the real one
-            setAllThreads((prev = []) =>
-              prev.map((t) =>
-                t.threadId === tempThreadId
-                  ? {
-                    ...t,
-                    threadId: threadData.threadId,
-                    title: threadData.title?.trim()
-                      ? threadData.title
-                      : tempTitle,
-                  }
-                  : t
-              )
-            );
+      // If no thread, create one
+      if (!threadId) {
+        const threadRes = await fetch(
+          `https://novaai-ktt3.onrender.com/api/thread`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ title: prompt.slice(0, 50) }),
           }
-        } catch (err) {
-          console.error("Thread creation failed:", err);
+        );
+
+        const threadData = await threadRes.json();
+
+        if (threadData?.threadId) {
+          threadId = threadData.threadId;
+          setCurrThreadId(threadId);
+
+          setAllThreads((prev = []) => [
+            { threadId, title: threadData.title || prompt.slice(0, 50) },
+            ...prev,
+          ]);
         }
       }
 
+      // Add user's message
       setMessages((prev = []) => [...prev, { role: "user", content: prompt }]);
 
+      // Send message to backend
       const response = await fetch(`https://novaai-ktt3.onrender.com/api/chat`, {
         method: "POST",
         headers: {
@@ -148,14 +129,20 @@ function ChatWindow() {
       });
 
       const res = await response.json();
+
       if (!response.ok) throw new Error(res.error || "Failed to get reply");
 
       const assistantReply = res.reply ?? "No reply from server";
-      setMessages((prev = []) => [...prev, { role: "assistant", content: "" }]);
+
+      // Add placeholder
+      setMessages((prev = []) => [
+        ...prev,
+        { role: "assistant", content: "" },
+      ]);
+
       await typeEffect(assistantReply);
     } catch (error) {
       console.error(error);
-      setReply("Error: Unable to get reply. Please check console.");
     } finally {
       setLoading(false);
       setPrompt("");
@@ -163,6 +150,7 @@ function ChatWindow() {
   };
 
   const handleProfileClick = () => setIsOpen((prev) => !prev);
+
   const handleLogout = () => {
     logout();
     navigate("/login");
@@ -215,6 +203,7 @@ function ChatWindow() {
               <i className="fa-solid fa-paper-plane"></i>
             </div>
           </div>
+
           <p className="info">
             NovaAI can make mistakes. Check important info.
           </p>

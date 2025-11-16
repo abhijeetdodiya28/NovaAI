@@ -88,72 +88,25 @@ function Sidebar() {
     try {
       const res = await axios.get(
         `https://novaai-ktt3.onrender.com/api/thread`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const threadsRaw = Array.isArray(res.data) ? res.data : [];
 
-      // Normalize server threads
       const serverThreads = threadsRaw.map((t) => {
-        const titleFromDoc = sanitizeTitle(t.title);
-        const titleFromFirstMsg = sanitizeTitle(t?.messages?.[0]?.content);
-        const finalTitle = titleFromDoc || titleFromFirstMsg || "Untitled Chat";
-        return { ...t, title: String(finalTitle) };
+        const title = sanitizeTitle(t.title) || "Untitled Chat";
+        return { ...t, title };
       });
 
-      // Merge server threads with any local optimistic threads kept in state.
-      setAllThreads((prev = []) => {
-        // Map server threads by id for quick lookup
-        const serverMap = new Map(serverThreads.map((t) => [t.threadId, t]));
+      // FIX: DO NOT MERGE — ALWAYS USE BACKEND DATA
+      setAllThreads(serverThreads);
 
-        // Build a merged map starting with server threads
-        const mergedMap = new Map(serverMap);
-
-        // Add any prev threads that server does not have (optimistic locals)
-        for (const local of prev) {
-          if (!mergedMap.has(local.threadId)) {
-            mergedMap.set(local.threadId, local);
-            continue;
-          }
-          // If both exist, prefer server title when it's non-empty; otherwise keep local title
-          const server = mergedMap.get(local.threadId);
-          const serverHasGoodTitle =
-            typeof server.title === "string" && server.title.trim().length > 0;
-
-          mergedMap.set(local.threadId, {
-            ...server,
-            // Keep important local fields (messages) if server doesn't provide them
-            messages:
-              Array.isArray(server.messages) && server.messages.length
-                ? server.messages
-                : local.messages || server.messages || [],
-            title: serverHasGoodTitle
-              ? server.title
-              : local.title || server.title,
-          });
-        }
-
-        // Return as an array, keep server order but put local-only threads at front (optional)
-        const merged = Array.from(mergedMap.values());
-
-        // Optional: sort so local-only (temp) threads remain at top
-        merged.sort((a, b) => {
-          const aIsLocal = String(a.threadId).startsWith("local-");
-          const bIsLocal = String(b.threadId).startsWith("local-");
-          if (aIsLocal && !bIsLocal) return -1;
-          if (!aIsLocal && bIsLocal) return 1;
-          return 0;
-        });
-
-        return merged;
-      });
     } catch (err) {
       console.error("Failed to load threads:", err);
       setAllThreads([]);
     }
-  }, [token, setAllThreads]);
+  }, [token]);
+
 
   useEffect(() => {
     getAllThreads();
