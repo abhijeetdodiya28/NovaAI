@@ -31,11 +31,8 @@ const Login = () => {
         } catch (error) {
             console.error(error);
 
-            const msg =
-                error?.error ||
-                error?.message ||
-                error?.success ||
-                "Login failed";
+            const msg = error?.message || error?.error || "Login failed";
+
 
             alert(msg);
         }

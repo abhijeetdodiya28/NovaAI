@@ -11,6 +11,8 @@ function ChatWindow() {
   const {
     prompt,
     setPrompt,
+    reply,
+    setReply,
     currThreadId,
     setCurrThreadId,
     setMessages,
@@ -18,6 +20,7 @@ function ChatWindow() {
     setNewChat,
     setAllThreads,
   } = useContext(MyContext);
+
 
   const { logout, user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
@@ -31,35 +34,35 @@ function ChatWindow() {
     setPrompt("");
   }, [currThreadId]);
 
-  const typeEffect = (text) => {
-    return new Promise((resolve) => {
-      const words = text.split(" ");
-      let currText = "";
-      let idx = 0;
+  // const typeEffect = (text) => {
+  //   return new Promise((resolve) => {
+  //     const words = text.split(" ");
+  //     let currText = "";
+  //     let idx = 0;
 
-      const interval = setInterval(() => {
-        if (idx < words.length) {
-          currText += (idx > 0 ? " " : "") + words[idx];
-          setMessages((prev = []) => {
-            const updated = [...prev];
-            if (
-              updated.length > 0 &&
-              updated[updated.length - 1].role === "assistant"
-            ) {
-              updated[updated.length - 1].content = currText;
-            } else {
-              updated.push({ role: "assistant", content: currText });
-            }
-            return updated;
-          });
-          idx++;
-        } else {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 50);
-    });
-  };
+  //     const interval = setInterval(() => {
+  //       if (idx < words.length) {
+  //         currText += (idx > 0 ? " " : "") + words[idx];
+  //         setMessages((prev = []) => {
+  //           const updated = [...prev];
+  //           if (
+  //             updated.length > 0 &&
+  //             updated[updated.length - 1].role === "assistant"
+  //           ) {
+  //             updated[updated.length - 1].content = currText;
+  //           } else {
+  //             updated.push({ role: "assistant", content: currText });
+  //           }
+  //           return updated;
+  //         });
+  //         idx++;
+  //       } else {
+  //         clearInterval(interval);
+  //         resolve();
+  //       }
+  //     }, 50);
+  //   });
+  // };
 
   const getReply = async () => {
     if (!prompt || !prompt.trim()) {
@@ -135,12 +138,8 @@ function ChatWindow() {
       const assistantReply = res.reply ?? "No reply from server";
 
       // Add placeholder
-      setMessages((prev = []) => [
-        ...prev,
-        { role: "assistant", content: "" },
-      ]);
+      setReply(assistantReply);
 
-      await typeEffect(assistantReply);
     } catch (error) {
       console.error(error);
     } finally {
@@ -186,7 +185,7 @@ function ChatWindow() {
           </div>
         ) : (
           <div className="chatArea">
-            <Chat key={currThreadId} messages={messages} />
+            <Chat key={currThreadId} />
             {loading && <ScaleLoader loading={true} color="#10a37f" />}
           </div>
         )}
