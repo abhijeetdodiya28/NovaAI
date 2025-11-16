@@ -1,22 +1,22 @@
+// backend/models/user.js
 import bcrypt from "bcryptjs";
-import mongoose, { Types } from "mongoose";
-import { v4 as uuidv4 } from "uuid";
-const userSchema = new mongoose.Schema({
-    userId: {
-        type: String,
-        default: () => uuidv4(),
-        unique: true
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema(
+    {
+        username: { type: String, required: true },
+        email: { type: String, required: true, unique: true },
+        password: { type: String },          // will be null for Google users
+        googleId: { type: String }           // set only for Google accounts
     },
-    username: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String },
-    googleId: { type: String }
-}, { timestamps: true });
+    { timestamps: true }
+);
 
 userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next();
+    // Only hash if password field is set and modified
+    if (!this.isModified("password") || !this.password) return next();
     this.password = await bcrypt.hash(this.password, 10);
     next();
-})
+});
 
 export default mongoose.model("User", userSchema);
