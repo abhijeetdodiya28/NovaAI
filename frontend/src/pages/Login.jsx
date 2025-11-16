@@ -30,8 +30,16 @@ const Login = () => {
             navigate("/chat");
         } catch (error) {
             console.error(error);
-            alert(error.message);
+
+            const msg =
+                error?.error ||
+                error?.message ||
+                error?.success ||
+                "Login failed";
+
+            alert(msg);
         }
+
     };
 
     const handleGoogleLogin = () => {
