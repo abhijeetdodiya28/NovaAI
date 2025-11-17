@@ -256,16 +256,17 @@ function Sidebar() {
 
     if (!result.isConfirmed) return;
 
-    if (threadId.startsWith("local-")) {
-      if (threadId === currThreadId) {
-        setCurrThreadId(null);
-        setMessages([]);
-        setNewChat(true);
-      }
-      return;
+    setAllThreads((prev) => prev.filter((t) => t.thread !== threadId));
+
+    if (threadId === currThreadId) {
+      setCurrThreadId(null);
+      setMessages([]);
+      setNewChat(true);
     }
 
-    if (!token) return;
+    if (threadId.startsWith("local-") || !token) {
+      return;
+    }
 
     try {
       await axios.delete(
@@ -274,16 +275,8 @@ function Sidebar() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
-      await getAllThreads();
-
-      if (threadId === currThreadId) {
-        setCurrThreadId(null);
-        setMessages([]);
-        setNewChat(true);
-      }
-    } catch {
-      /* silent */
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -350,9 +343,8 @@ function Sidebar() {
         onClick={toggleSidebar}
       >
         <i
-          className={`fa-solid ${
-            collapsed ? "fa-chevron-right" : "fa-chevron-left"
-          }`}
+          className={`fa-solid ${collapsed ? "fa-chevron-right" : "fa-chevron-left"
+            }`}
         ></i>
       </div>
     </>

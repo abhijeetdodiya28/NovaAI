@@ -19,7 +19,7 @@ router.post("/thread", async (req, res) => {
         const { title } = req.body;
 
         const thread = new Thread({
-            userId: new mongoose.Types.ObjectId(req.user.id), // ✅ Fix: Ensure ObjectId type
+            userId: new mongoose.Types.ObjectId(req.user.id), // Fix: Ensure ObjectId type
             threadId: uuidv4(),
             title: title?.trim() || "New Chat",
             messages: [],
@@ -184,10 +184,11 @@ router.put("/thread/:threadId", async (req, res) => {
         if (!title) {
             return res.status(400).json({ error: "Title is required" });
         }
+        const userId = new mongoose.Types.ObjectId(req.user.id);
 
         // Find thread by threadId field (not _id)
         const thread = await Thread.findOneAndUpdate(
-            { threadId },
+            { threadId, userId },
             { title },
             { new: true }
         );
