@@ -137,7 +137,7 @@ router.post("/chat", async (req, res) => {
         const userId = new mongoose.Types.ObjectId(req.user.id);
         let thread = await Thread.findOne({ threadId, userId });
 
-        // ✅ Clean title safely before saving
+        // Clean title safely before saving
         let title = "New Chat";
         if (message && typeof message === "string" && message.trim().length > 0) {
             title = message.replace(/undefined/gi, "").slice(0, 50).trim();
@@ -153,7 +153,7 @@ router.post("/chat", async (req, res) => {
             });
         } else {
             thread.messages.push({ role: "user", content: message });
-            // ✅ update title if not yet set properly
+            // update title if not yet set properly
             if (!thread.title || thread.title.includes("undefined")) {
                 thread.title = title;
             }

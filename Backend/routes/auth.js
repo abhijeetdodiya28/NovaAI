@@ -109,8 +109,9 @@ router.post("/forgot-password", async (req, res) => {
         if (!user) return res.status(404).json({ message: "User not found" });
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        const resetLink = `http://localhost:5173/reset-password/${token}`;
+        const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
 
+        // console.log(resetLink);
         await sendEmail(user.email, "Password Reset", `Click here to reset: ${resetLink}`);
         res.json({ message: "Password reset link sent to your email" });
 
