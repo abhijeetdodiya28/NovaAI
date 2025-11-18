@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import passport from "passport";
 
 import authRouter from "./routes/auth.js";
-// import resetPasswordRoute from "./routes/auth.js";
 
 import chatRoutes from "./routes/chat.js";
 import "./middleware/googleAuth.js";
@@ -24,7 +23,7 @@ app.use(passport.initialize());
 // app.use("/api/reset-password", resetPasswordRoute);
 app.use("/api/auth", authRouter);
 app.use("/api", protectedRoutes);
-app.use("/api", chatRoutes);
+app.use("/api/chat", chatRoutes);
 
 // ------------------- DATABASE & SERVER START -------------------
 const startServer = async () => {
