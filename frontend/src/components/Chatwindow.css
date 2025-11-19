@@ -29,7 +29,8 @@
   gap: 0.5rem;
   font-size: 1.05rem;
   font-weight: 600;
-  color: #a855f7; /* Purple accent for NovaAI */
+  color: #a855f7;
+  /* Purple accent for NovaAI */
   letter-spacing: 0.3px;
 }
 
@@ -210,6 +211,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -221,8 +223,21 @@
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.typingLoader {
+  position: absolute;
+  bottom: 120px;
+  /* slightly above input box */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

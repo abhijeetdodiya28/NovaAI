@@ -13,7 +13,7 @@ const ForgotPassword = () => {
         setMessage("");
         setLoading(true);
         try {
-            const data = await apiFetch("/auth/forgot-password", {
+            const data = await apiFetch("/api/auth/forgot-password", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),

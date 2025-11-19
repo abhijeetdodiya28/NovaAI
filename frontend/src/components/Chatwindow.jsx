@@ -121,15 +121,17 @@ function ChatWindow() {
               prev.map((t) =>
                 t.threadId === tempThreadId
                   ? {
-                      ...t,
-                      threadId: threadData.threadId,
-                      title: threadData.title?.trim()
-                        ? threadData.title
-                        : tempTitle,
-                    }
+                    ...t,
+                    threadId: threadData.threadId,
+                    title: threadData.title?.trim()
+                      ? threadData.title
+                      : tempTitle,
+                  }
                   : t
               )
             );
+            window.dispatchEvent(new Event("refreshThreads"));
+
           }
         } catch (err) {
           console.error("Thread creation failed:", err);
@@ -155,7 +157,7 @@ function ChatWindow() {
       await typeEffect(assistantReply);
     } catch (error) {
       console.error(error);
-      setReply("Error: Unable to get reply. Please check console.");
+      setReply("Error: Unable to get reply. Please wait for sometime.");
     } finally {
       setLoading(false);
       setPrompt("");
@@ -199,7 +201,9 @@ function ChatWindow() {
         ) : (
           <div className="chatArea">
             <Chat key={currThreadId} messages={messages} />
-            {loading && <ScaleLoader loading={true} color="#10a37f" />}
+            {loading && <div className="typingLoader">
+              <ScaleLoader color="#540979ff" />
+            </div>}
           </div>
         )}
 

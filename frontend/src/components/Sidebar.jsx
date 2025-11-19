@@ -156,8 +156,10 @@ function Sidebar() {
   }, [token, setAllThreads]);
 
   useEffect(() => {
-    getAllThreads();
-  }, [getAllThreads, currThreadId]);
+    const handler = () => getAllThreads();
+    window.addEventListener("refreshThreads", handler);
+    return () => window.removeEventListener("refreshThreads", handler);
+  }, [getAllThreads]);
 
   /* ------------------ Create new chat ------------------ */
   const createNewChat = async () => {
@@ -256,7 +258,7 @@ function Sidebar() {
 
     if (!result.isConfirmed) return;
 
-    setAllThreads((prev) => prev.filter((t) => t.thread !== threadId));
+    setAllThreads((prev) => prev.filter((t) => t.threadId !== threadId));
 
     if (threadId === currThreadId) {
       setCurrThreadId(null);

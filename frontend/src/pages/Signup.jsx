@@ -3,6 +3,7 @@ import { apiFetch } from "./api.js";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import logo from '../assets/logo.png'; // Make sure the path is correct
+import Swal from "sweetalert2";
 
 const Signup = () => {
     const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -16,7 +17,7 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await apiFetch("/auth/signup", {
+            const data = await apiFetch("/api/auth/signup", {
                 method: "POST",
                 body: JSON.stringify(form),
             });
@@ -27,13 +28,32 @@ const Signup = () => {
             login(data);
             navigate("/chat");
         } catch (error) {
-            alert(error.message);
-            console.error(error);
+            const msg =
+                error?.error ||
+                error?.message ||
+                "Something went wrong. Please try again.";
+
+            Swal.fire({
+                icon: "error",
+                title: "Signup Failed",
+                text: msg,
+                background: "#1E293B",
+                color: "#fff",
+                iconColor: "#EF4444",
+                confirmButtonColor: "#10B981",
+                showClass: {
+                    popup: "animate__animated animate__fadeInDown",
+                },
+                hideClass: {
+                    popup: "animate__animated animate__fadeOutUp",
+                },
+            });
         }
+
     };
 
     const handleGoogleSignup = () => {
-        window.location.href = "http://localhost:7000/api/auth/google";
+        window.location.href = "https://novaai-39kh.onrender.com/api/auth/google";
     };
 
     const handleLoginRedirect = () => {

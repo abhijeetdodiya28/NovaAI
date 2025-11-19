@@ -1,6 +1,6 @@
 // api.js
 const API_URL =
-  import.meta.env.VITE_API_URL || "https://novaai-ktt3.onrender.com";
+  import.meta.env.VITE_API_URL || "https://novaai-39kh.onrender.com";
 
 export const apiFetch = async (url, options = {}) => {
   const token = localStorage.getItem("token");

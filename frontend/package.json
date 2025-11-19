@@ -10,6 +10,9 @@
     "preview": "vite preview",
     "tailwind:init": "tailwindcss init -p"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
     "axios": "^1.12.2",
