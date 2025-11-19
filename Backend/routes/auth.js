@@ -84,7 +84,7 @@ router.get("/google", passport.authenticate("google", { scope: ["profile", "emai
 
 router.get(
     "/google/callback",
-    passport.authenticate("google", { session: false, failureRedirect: "/login" }),
+    passport.authenticate("google", { session: false, failureRedirect: "http://localhost:5173/login" }),
     (req, res) => {
         const user = req.user;
 
