@@ -1,4 +1,4 @@
-import "./ChatWindow.css";
+import "./Chatwindow.css";
 import Chat from "./Chat.jsx";
 import Swal from "sweetalert2";
 import { useContext, useState } from "react";
