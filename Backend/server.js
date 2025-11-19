@@ -15,7 +15,29 @@ const app = express();
 const PORT = process.env.PORT || 7000;
 
 // ------------------- MIDDLEWARES -------------------
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://nova-ai-red-six.vercel.app"
+];
+
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            console.log("Origin request:", origin); // Debug log
+
+            if (!origin) return callback(null, true); // Allow server-to-server requests
+
+            if (allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+
+            return callback(new Error("CORS blocked: " + origin));
+        },
+        credentials: true,
+    })
+);
+
+
 app.use(express.json());
 app.use(passport.initialize());
 

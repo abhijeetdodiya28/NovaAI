@@ -95,7 +95,7 @@ router.get(
         );
 
         // For production, use httpOnly cookie instead of query param
-        res.redirect(`http://localhost:5173/auth/google/callback?token=${token}`);
+        res.redirect(`https://nova-ai-red-six.vercel.app/auth/google/callback?token=${token}`);
     }
 );
 
@@ -128,7 +128,7 @@ router.post("/forgot-password", async (req, res) => {
             return res.status(500).json({ message: "Server error during token generation" });
         }
 
-        const resetLink = `http://localhost:5173/reset-password/${token}`;
+        const resetLink = `https://nova-ai-red-six.vercel.app/reset-password/${token}`;
         console.log("Reset link (for logs):", resetLink);
 
         try {
