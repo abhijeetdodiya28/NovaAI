@@ -23,7 +23,7 @@ app.use(passport.initialize());
 // app.use("/api/reset-password", resetPasswordRoute);
 app.use("/api/auth", authRouter);
 app.use("/api", protectedRoutes);
-app.use("/api/chat", chatRoutes);
+app.use("/api", chatRoutes);
 
 // ------------------- DATABASE & SERVER START -------------------
 const startServer = async () => {
