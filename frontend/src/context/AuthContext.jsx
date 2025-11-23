@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
 
         if (resetContext) resetContext();
-
+        setAllThreads([]);
     }, []);
 
     return (
