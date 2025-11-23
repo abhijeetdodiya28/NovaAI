@@ -53,7 +53,7 @@ const Signup = () => {
     };
 
     const handleGoogleSignup = () => {
-        window.location.href = "https://novaai-39kh.onrender.com/api/auth/google";
+        window.location.href = "https://nova-ai-pi.vercel.app/api/auth/google";
     };
 
     const handleLoginRedirect = () => {

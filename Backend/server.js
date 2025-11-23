@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 7000;
 // ------------------- MIDDLEWARES -------------------
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://nova-ai-sand-one.vercel.app"
+    "https://nova-ai-pi.vercel.app",
 ];
 
 app.use(
