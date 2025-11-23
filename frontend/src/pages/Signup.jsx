@@ -25,10 +25,8 @@ const Signup = () => {
             // save the token for new user..
 
             localStorage.setItem("token", data.token);
-            login(data.user, data.token);
-
-            window.dispatchEvent(new Event("refreshThreads"));
-
+            login(data);
+            navigate("/chat");
         } catch (error) {
             const msg =
                 error?.error ||
